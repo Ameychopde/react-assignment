@@ -1,7 +1,7 @@
 // src/components/CustomerForm.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+// define the form 
 const CustForm = ({ onAddCustomer }) => {
   const [formData, setFormData] = useState({
     pan: "",
@@ -15,7 +15,7 @@ const CustForm = ({ onAddCustomer }) => {
   const [panVerificationStatus, setPanVerificationStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fetchedPostcodes, setFetchedPostcodes] = useState({}); // Track fetched postcodes
-
+// checking for pan card verfication 
   useEffect(() => {
     const verifyPan = async (panNumber) => {
       if (panNumber.length === 10) {
@@ -50,7 +50,7 @@ const CustForm = ({ onAddCustomer }) => {
       setPanVerificationStatus(null);
     }
   }, [formData.pan]);
-
+// Adding  address got by postcode using  provided api 
   useEffect(() => {
     formData.addresses.forEach((address, index) => {
       if (
@@ -77,7 +77,7 @@ const CustForm = ({ onAddCustomer }) => {
         updatedAddresses[index].state = response.data.state[0].name;
         updatedAddresses[index].city = response.data.city[0].name;
         setFormData({ ...formData, addresses: updatedAddresses });
-        setFetchedPostcodes({ ...fetchedPostcodes, [postcode]: true }); // Mark this postcode as fetched
+        setFetchedPostcodes({ ...fetchedPostcodes, [postcode]: true }); 
       } else {
         console.error("Error fetching state and city:", response.data);
       }
@@ -85,17 +85,17 @@ const CustForm = ({ onAddCustomer }) => {
       console.error("Error fetching state and city:", error);
     }
   };
-
+  // Hadlling the the input  given by users .
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  //  handling the address change as max 10 time use can add address .
   const handleAddressChange = (index, field, value) => {
     const newAddresses = formData.addresses.slice();
     newAddresses[index][field] = value;
     if (field === "postcode") {
-      // Reset fetched flag when postcode changes
+      
       const newFetchedPostcodes = { ...fetchedPostcodes };
       delete newFetchedPostcodes[value];
       setFetchedPostcodes(newFetchedPostcodes);
@@ -121,6 +121,7 @@ const CustForm = ({ onAddCustomer }) => {
     setFormData({ ...formData, addresses: newAddresses });
   };
 
+  // sending the creat post request to the server after submiting the from  . 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isPanValid) {
@@ -140,8 +141,9 @@ const CustForm = ({ onAddCustomer }) => {
             { line1: "", line2: "", postcode: "", state: "", city: "" },
           ],
         });
+        // Calling the callback to update the customer list
         setIsPanValid(false);
-        if (onAddCustomer) onAddCustomer(); // Call the callback to update the customer list
+        if (onAddCustomer) onAddCustomer(); 
       } catch (error) {
         console.error("Error adding customer:", error);
       } finally {

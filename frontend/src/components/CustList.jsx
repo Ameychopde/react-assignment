@@ -13,7 +13,7 @@ const CustList = () => {
     mobile: '',
     addresses: [{ line1: '', line2: '', postcode: '', state: '', city: '' }]
   });
-  const [refresh, setRefresh] = useState(false); // State to trigger refresh
+  const [refresh, setRefresh] = useState(false); 
 
   // Fetch customers when component mounts or refresh is triggered
   useEffect(() => {
@@ -27,10 +27,10 @@ const CustList = () => {
     };
 
     fetchCustomers();
-  }, [refresh]); // Depend on refresh state
-
+  }, [refresh]); 
+// Creating the edit function .. 
   const handleEditClick = (customer) => {
-    setEditingId(customer._id); // Ensure correct ID field
+    setEditingId(customer._id);
     setEditForm(customer);
   };
 
@@ -44,7 +44,7 @@ const CustList = () => {
     newAddresses[index][field] = value;
     setEditForm({ ...editForm, addresses: newAddresses });
   };
-
+// on clicking save button a api call is send to update the database . 
   const handleSaveEdit = async () => {
     try {
       await axios.put(`http://localhost:5000/api/customers/update-cust/${editingId}`, editForm);
@@ -67,7 +67,7 @@ const CustList = () => {
       addresses: [{ line1: '', line2: '', postcode: '', state: '', city: '' }]
     });
   };
-
+// Sending the delete  api call . 
   const handleDeleteClick = async (id) => {
     try {
       const response = await axios.delete(`http://localhost:5000/api/customers/delete-cust/${id}`);
@@ -84,13 +84,13 @@ const CustList = () => {
 
   // Function to trigger a refresh
   const handleAddCustomer = () => {
-    setRefresh(prev => !prev); // Toggle refresh state
+    setRefresh(prev => !prev);
   };
 
   return (
     <div className="p-6">
       <h1 className="text-xl font-semibold mb-4">React Assignment</h1>
-      <CustForm onAddCustomer={handleAddCustomer} /> {/* Render CustomerForm and pass callback */}
+      <CustForm onAddCustomer={handleAddCustomer} /> 
       <div className="overflow-x-auto mt-6">
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
@@ -104,7 +104,7 @@ const CustList = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {customers.length > 0 ? (
               customers.map((customer) => (
-                <tr key={customer._id}> {/* Use _id if that's your ID field */}
+                <tr key={customer._id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{customer.pan}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {editingId === customer._id ? (
